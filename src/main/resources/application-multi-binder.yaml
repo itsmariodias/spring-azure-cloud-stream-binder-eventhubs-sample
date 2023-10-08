@@ -1,0 +1,94 @@
+spring:
+  cloud:
+    azure:
+      eventhubs:
+        connection-string: ${AZURE_EVENTHUB_NAMESPACE_CONNECTION_STRING}
+        namespace: red-trainer
+        processor:
+          checkpoint-store:
+            container-name: poke-ball
+            account-name: redbackpack
+            account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
+    function:
+      definition: consumeGrass;consumeFire;consumeWater
+    stream:
+      output-bindings: supplyGrass;supplyFire;supplyWater
+      bindings:
+        consumeGrass-in-0:
+          destination: bulbasaur
+          group: $Default
+        consumeFire-in-0:
+          binder: fire
+          destination: charmander
+          group: $Default
+        consumeWater-in-0:
+          binder: water
+          destination: squirtle
+          group: $Default
+        supplyGrass-out-0:
+          destination: bulbasaur
+        supplyFire-out-0:
+          destination: charmander
+        supplyWater-out-0:
+          binder: water
+          destination: squirtle
+      binders:
+        fire:
+          type: eventhubs
+          default-candidate: false
+          environment:
+            spring:
+              cloud:
+                azure:
+                  eventhubs:
+                    processor:
+                      checkpoint-store:
+                        container-name: great-ball
+        water:
+          type: eventhubs
+          default-candidate: false
+          environment:
+            spring:
+              cloud:
+                azure:
+                  eventhubs:
+                    connection-string: ${AZURE_EVENTHUB_NAMESPACE_02_CONNECTION_STRING}
+                    namespace: blue-trainer
+                    processor:
+                      checkpoint-store:
+                        container-name: ultra-ball
+                        account-name: bluebackpack
+                        account-key: ${AZURE_STORAGE_02_ACCOUNT_KEY}
+      eventhubs:
+        bindings:
+          consumeGrass-in-0:
+            consumer:
+              checkpoint:
+                mode: RECORD
+          consumeFire-in-0:
+            consumer:
+              checkpoint:
+                mode: RECORD
+          consumeWater-in-0:
+            consumer:
+              checkpoint:
+                mode: RECORD
+          supplyGrass-out-0:
+            producer:
+              sync: true
+          supplyFire-out-0:
+            producer:
+              sync: true
+          supplyWater-out-0:
+            producer:
+              sync: true
+      default:
+        producer:
+          errorChannelEnabled: true
+
+logging:
+  level:
+    org:
+      springframework: OFF
+    com:
+      azure: OFF

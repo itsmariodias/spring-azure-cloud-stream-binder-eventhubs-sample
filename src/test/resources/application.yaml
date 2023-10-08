@@ -1,0 +1,40 @@
+spring:
+  cloud:
+    azure:
+      eventhubs:
+        connection-string: Endpoint=sb://my-application.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=dummy
+        namespace: my-application
+        processor:
+          checkpoint-store:
+            container-name: medium-eventhub
+            account-name: mediumeventhub
+            account-key: dummy-key
+    function:
+      definition: consume
+    stream:
+      output-bindings: supply
+      bindings:
+        consume-in-0:
+          destination: medium-eventhub
+          group: $Default
+        supply-out-0:
+          destination: medium-eventhub
+      eventhubs:
+        bindings:
+          consume-in-0:
+            consumer:
+              checkpoint:
+                mode: RECORD
+          supply-out-0:
+            producer:
+              sync: true
+      default:
+        producer:
+          errorChannelEnabled: true
+
+logging:
+  level:
+    org:
+      springframework: OFF
+    com:
+      azure: OFF
