@@ -6,8 +6,8 @@ This application is used to demonstrate Azure Event Hubs integration with Spring
 * [Configure Multiple Binders with Spring Cloud Stream and Azure Event Hubs](https://itsmariodias.medium.com/configure-multiple-binders-with-spring-cloud-stream-and-azure-event-hubs-fd41e19dfe47)  
 * [Authentication in Spring Cloud Azure](https://itsmariodias.medium.com/authentication-in-spring-cloud-azure-81f82bc240a8)  
 
-## Spring Profiles
-The application code above contains the code for all 4 implementations demonstrated in the articles linked above. To switch between the implementations, simply change the environment variable SPRING_PROFILES_ACTIVE to one of the following:
+### Spring Profiles
+The repo contains the code for all 4 implementations demonstrated in the articles linked above. To switch between the implementations, simply change the environment variable SPRING_PROFILES_ACTIVE before executing the application to one of the following:
 * single-binder
 * multi-binder
 * multi-binder-mi-auth
